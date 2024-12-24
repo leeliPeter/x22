@@ -2,7 +2,6 @@
 
 import React, { useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { ForceGraphMethods } from "react-force-graph-2d";
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
   ssr: false,
@@ -79,6 +78,8 @@ const sampleData: GraphData = {
 sampleData.links = generateTreeLinks(sampleData.nodes);
 
 export default function Graph() {
+  // Disable any type checking for the ref since it's a library limitation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graphRef = useRef<any>(null);
   const [dimensions, setDimensions] = React.useState({
     width: 800,
@@ -113,12 +114,14 @@ export default function Graph() {
         ref={graphRef}
         graphData={sampleData}
         nodeLabel="name"
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         nodeColor={(node: any) => (node as Node).color ?? "#cccccc"}
         nodeRelSize={2}
         linkWidth={1.5}
         minZoom={1}
         maxZoom={2}
         linkColor={() => "#cccccc"}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onNodeClick={(node: any) => handleNodeClick(node as Node)}
         enableNodeDrag={true}
         enableZoomInteraction={true}
