@@ -2,14 +2,15 @@
 
 import React, { useCallback, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { communities, nodes } from "@/data/data";
+import { communities, nodes, Node as DataNode } from "@/data/data";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
   ssr: false,
 });
 
 // Define types for our graph data
-type Node = {
+type GraphNode = {
   id: string;
   name: string;
   val: number;
@@ -28,12 +29,43 @@ type Link = {
 };
 
 type GraphData = {
-  nodes: Node[];
+  nodes: GraphNode[];
   links: Link[];
 };
 
+// NodeDetail component
+const NodeDetail = ({ node }: { node: DataNode | null }) => {
+  if (!node) return null;
+
+  return (
+    <Card className="w-80 absolute right-4 top-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <CardHeader>
+        <CardTitle>{node.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <div>
+          <div className="font-semibold">Type:</div>
+          <div>{node.type}</div>
+        </div>
+        <div>
+          <div className="font-semibold">Description:</div>
+          <div>{node.description}</div>
+        </div>
+        <div>
+          <div className="font-semibold">Community:</div>
+          <div>{node.community}</div>
+        </div>
+        <div>
+          <div className="font-semibold">Degree:</div>
+          <div>{node.degree}</div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 // Helper function to generate random connections between nodes
-const generateRandomLinks = (nodes: Node[]) => {
+const generateRandomLinks = (nodes: GraphNode[]) => {
   const links: Link[] = [];
   nodes.forEach((node, i) => {
     // Create 1-3 random connections for each node
@@ -67,6 +99,7 @@ export default function Graph() {
   const [selectedCommunity, setSelectedCommunity] = useState<number | null>(
     null
   );
+  const [selectedNode, setSelectedNode] = useState<DataNode | null>(null);
   const [dimensions, setDimensions] = React.useState({
     width: 0,
     height: 800,
@@ -74,7 +107,7 @@ export default function Graph() {
 
   // Generate initial graph data with communities
   const [graphData, setGraphData] = useState<GraphData>(() => {
-    const communityNodes: Node[] = communities.map((community) => ({
+    const communityNodes: GraphNode[] = communities.map((community) => ({
       id: `community-${community.id}`,
       name: community.title,
       val: community.size * 3, // Size based on community size
@@ -103,8 +136,8 @@ export default function Graph() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Handle node click
-  const handleNodeClick = useCallback((node: Node) => {
+  // Update handle node click
+  const handleNodeClick = useCallback((node: GraphNode) => {
     if (node.isCommunity) {
       const communityId = parseInt(node.id.split("-")[1]);
 
@@ -120,16 +153,24 @@ export default function Graph() {
         }));
 
       setSelectedCommunity(communityId);
+      setSelectedNode(null);
       setGraphData({
         nodes: communityNodes,
         links: generateRandomLinks(communityNodes),
       });
+    } else {
+      // Find and set the selected node from our data
+      const nodeData = nodes.find((n) => n.id === node.id);
+      if (nodeData) {
+        setSelectedNode(nodeData);
+      }
     }
   }, []);
 
-  // Add back button to return to community view
+  // Update handle back to communities
   const handleBackToCommunities = useCallback(() => {
     setSelectedCommunity(null);
+    setSelectedNode(null);
     const communityNodes = communities.map((community) => ({
       id: `community-${community.id}`,
       name: community.title,
@@ -140,7 +181,7 @@ export default function Graph() {
 
     setGraphData({
       nodes: communityNodes,
-      links: generateRandomLinks(communityNodes), // Add random connections between communities
+      links: generateRandomLinks(communityNodes),
     });
   }, []);
 
@@ -154,6 +195,7 @@ export default function Graph() {
           Back to Communities
         </button>
       )}
+      <NodeDetail node={selectedNode} />
       <div
         ref={containerRef}
         className="w-full h-[calc(100vh-100px)] border rounded-lg bg-background overflow-hidden"
@@ -162,13 +204,13 @@ export default function Graph() {
           ref={graphRef}
           graphData={graphData}
           nodeLabel="name"
-          nodeColor={(node: any) => (node as Node).color ?? "#cccccc"}
+          nodeColor={(node: any) => (node as GraphNode).color ?? "#cccccc"}
           nodeRelSize={2}
           linkWidth={1.5}
           minZoom={1}
           maxZoom={2}
           linkColor={() => "#cccccc"}
-          onNodeClick={(node: any) => handleNodeClick(node as Node)}
+          onNodeClick={(node: any) => handleNodeClick(node as GraphNode)}
           enableNodeDrag={true}
           enableZoomInteraction={true}
           width={dimensions.width}

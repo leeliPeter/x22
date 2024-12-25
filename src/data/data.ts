@@ -36,7 +36,7 @@ export const nodes = [
   },
   {
     id: "3b169bbd2",
-    title: "所得稅利益",
+    title: "所���稅利益",
     type: "FINANCIAL LIABILITIES",
     description: "所得稅利益是指公司因稅務調整而獲得的稅務優惠",
     community: 6,
