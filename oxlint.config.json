@@ -1,0 +1,40 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "categories": {
+      "correctness": "error",
+      "pedantic": "warn",
+      "perf": "warn",
+      "restriction": "error",
+      "suspicious": "error",
+      "style": "warn"
+    },
+    "plugins": [
+      "typescript",
+      "unicorn",
+      "react",
+      "react_perf",
+      "oxc",
+      "import",
+      "jsdoc",
+      "promise",
+      "next"
+    ],
+    "rules": {
+      "eslint/sort-imports": "off",
+      "eslint/sort-keys": "off",
+      "import/no-default-export": "off",
+      "import/unambiguous": "off",
+      "react/react-in-jsx-scope": "off",
+      "react_perf/jsx-no-new-object-as-prop": "off",
+      "react_perf/jsx-no-jsx-as-prop": "off",
+      "unicorn/filename-case": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+      "unicorn/no-document-cookie": "off"
+    },
+    "env": {
+      "browser": true,
+      "es2022": true,
+      "node": true
+    }
+  }

@@ -12,6 +12,7 @@ export default function LayoutWrapper({
 
   return (
     <div className="flex h-screen">
+      {/* sidebar wrap the main content */}
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
       <main className="flex-1 w-full overflow-x-hidden ">{children}</main>
     </div>
