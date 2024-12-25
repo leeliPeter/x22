@@ -78,19 +78,28 @@ const sampleData: GraphData = {
 sampleData.links = generateTreeLinks(sampleData.nodes);
 
 export default function Graph() {
-  // Disable any type checking for the ref since it's a library limitation
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graphRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState({
-    width: 800,
+    width: 0,
     height: 800,
   });
 
   React.useEffect(() => {
-    setDimensions({
-      width: window.innerWidth - 100,
-      height: 800,
-    });
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        setDimensions({
+          // width changes based on the sidebar width
+          width: containerRef.current.offsetWidth,
+          height: 800,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   // Callback to handle node click
@@ -109,7 +118,10 @@ export default function Graph() {
   }, []);
 
   return (
-    <div className="h-[800px] w-full border rounded-lg bg-background overflow-hidden">
+    <div
+      ref={containerRef}
+      className="w-full h-[800px] border rounded-lg bg-background overflow-hidden"
+    >
       <ForceGraph2D
         ref={graphRef}
         graphData={sampleData}

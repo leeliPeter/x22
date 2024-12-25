@@ -13,7 +13,7 @@ export default function LayoutWrapper({
   return (
     <div className="flex h-screen">
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 w-full overflow-x-hidden ">{children}</main>
     </div>
   );
 }
