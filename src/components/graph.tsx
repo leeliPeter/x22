@@ -120,7 +120,7 @@ export default function Graph() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-[800px] border rounded-lg bg-background overflow-hidden"
+      className="w-full h-[calc(100vh-100px)] border rounded-lg bg-background overflow-hidden"
     >
       <ForceGraph2D
         ref={graphRef}
