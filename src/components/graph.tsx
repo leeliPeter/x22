@@ -94,6 +94,7 @@ const communityColors = {
 };
 
 export default function Graph() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graphRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedCommunity, setSelectedCommunity] = useState<number | null>(
@@ -204,12 +205,14 @@ export default function Graph() {
           ref={graphRef}
           graphData={graphData}
           nodeLabel="name"
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           nodeColor={(node: any) => (node as GraphNode).color ?? "#cccccc"}
           nodeRelSize={2}
           linkWidth={1.5}
           minZoom={1}
           maxZoom={3}
           linkColor={() => "#cccccc"}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onNodeClick={(node: any) => handleNodeClick(node as GraphNode)}
           enableNodeDrag={true}
           enableZoomInteraction={true}
