@@ -5,7 +5,7 @@ import ChatBox from "./_components/chat-box";
 import Report from "./_components/report";
 
 export default function ReportPage() {
-  const [leftWidth, setLeftWidth] = useState(50); // percentage
+  const [leftWidth, setLeftWidth] = useState(70); // percentage
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {

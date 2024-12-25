@@ -43,7 +43,7 @@ export default function Sidebar({
           variant="ghost"
           size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="h-8 w-8"
+          className="h-8 w-8 hover:bg-primary hover:text-primary-foreground"
         >
           {isCollapsed ? <MenuIcon size={18} /> : <XIcon size={18} />}
         </Button>
@@ -51,14 +51,14 @@ export default function Sidebar({
 
       <Separator />
 
-      <nav className="space-y-2">
+      <nav className="space-y-2 flex flex-col">
         {menuItems.map((item) => (
           <Link href={item.href} key={item.label}>
             <Button
               key={item.label}
               variant="ghost"
               className={cn(
-                "w-full justify-start",
+                "w-full justify-start hover:bg-primary hover:text-primary-foreground",
                 isCollapsed ? "px-2" : "px-4"
               )}
             >

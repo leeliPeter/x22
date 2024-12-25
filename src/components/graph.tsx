@@ -208,7 +208,7 @@ export default function Graph() {
           nodeRelSize={2}
           linkWidth={1.5}
           minZoom={1}
-          maxZoom={2}
+          maxZoom={3}
           linkColor={() => "#cccccc"}
           onNodeClick={(node: any) => handleNodeClick(node as GraphNode)}
           enableNodeDrag={true}
